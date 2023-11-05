@@ -23,7 +23,7 @@ def start(message):
 
 @bot.message_handler(commands=['contact_support'])
 def Contact_us(message):
-    bot.reply_to(message, "You can contact us here @CyberhnterX")
+    bot.reply_to(message, "You can contact us here @CyberhunterX")
 
 @bot.message_handler(commands=['view_grade'])
 def view_grade(message):
