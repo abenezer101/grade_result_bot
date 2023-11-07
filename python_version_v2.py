@@ -23,7 +23,7 @@ def start(message):
 
 @bot.message_handler(commands=['contact_support'])
 def Contact_us(message):
-    bot.reply_to(message, "You can contact us here @CyberhunterX")
+    bot.reply_to(message, "You can contact us here @CyberhnterX")
 
 @bot.message_handler(commands=['view_grade'])
 def view_grade(message):
@@ -68,25 +68,53 @@ mydb = mysql.connector.connect(
 # Create a cursor object to interact with the database
 mycursor = mydb.cursor()
 
-# Handle messages with username, password, and subject
-@bot.message_handler(func=lambda message: True)
-def process_message(message):
-    chat_id = message.chat.id
-    text = message.text.split()
-    if len(text) == 3:
-        username, password, subject = text
-        query = "SELECT * FROM users WHERE username = %s AND password = %s AND subject = %s"
-        values = (username, password, subject)
-        mycursor.execute(query, values)
-        result = mycursor.fetchone()
-        if result:
-            bot.send_message(chat_id, result[3])
-        else:
-            bot.send_message(chat_id, "Invalid credentials.")
-    else:
-        bot.send_message(chat_id, "Please enter username, password, and subject.")
+# # Handle messages with username, password, and subject
+# @bot.message_handler(func=lambda message: True)
+# def process_message(message):
+#     chat_id = message.chat.id
+#     text = message.text.split()
+#     if len(text) == 3:
+#         username, password, subject = text
+#         query = "SELECT * FROM users WHERE username = %s AND password = %s AND subject = %s"
+#         values = (username, password, subject)
+#         mycursor.execute(query, values)
+#         result = mycursor.fetchone()
+#         if result:
+#             bot.send_message(chat_id, result[3])
+#         else:
+#             bot.send_message(chat_id, "Invalid credentials.")
+#     else:
+#         bot.send_message(chat_id, "Please enter username, password, and subject.")
 
 
+
+
+def fetch_user_result(username: str, password: str, subject: str):
+    query = "SELECT * FROM users WHERE username = %s AND password = %s AND subject = %s"
+    values = (username, password, subject)
+    mycursor.execute(query, values)
+    result = mycursor.fetchone()
+    return result
+
+WAIT_MESSAGE = "Please wait a moment while I'm checking your result."
+
+@bot.message_handler(regexp=r"^(\w+)\s+(.+)\s+(\w+)$")
+def handle_message(message: telebot.types.Message):
+    name, passwd, subject = message.text.split()
+    msg = bot.reply_to(message, WAIT_MESSAGE)
+    result = fetch_user_result(name, passwd, subject)
+    bot.edit_message_text(WAIT_MESSAGE + ".", message.chat.id, msg.message_id)
+    if not result:
+        bot.edit_message_text(
+            f"Sorry, your credential is incorrect. Please try again.",
+            message.chat.id,
+            msg.message_id,
+        )
+        return
+    bot.reply_to(message, f"Hello {name}, your result for {subject} is {result[3]}.")
+    bot.delete_message(message.chat.id, msg.message_id)
+    
+    
 bot.polling()
 
 
