@@ -118,4 +118,27 @@ def handle_message(message: telebot.types.Message):
 bot.polling()
 
 
+app = Flask(__name__)
+
+
+@app.route('/')
+def index():
+    return 'Hello World!'
+
+
+@app.route('/{}'.format(bot), methods=['GET', 'POST'])
+def respond():
+    update = Update.de_json(request.get_json(force=True), bot)
+    setup().process_update(update)
+    return 'ok'
+
+
+@app.route('/setwebhook', methods=['GET', 'POST'])
+def set_webhook():
+    s = bot.setWebhook('{URL}/{HOOK}'.format(URL=host, HOOK=bot))
+    if s:
+        return "webhook setup ok"
+    else:
+        return "webhook setup failed"
+
 
