@@ -6,6 +6,7 @@ from flask import Flask, request
 ################################### TelegramBot frontend code starts here ##########################################
 
 bot = telebot.TeleBot('6513187968:AAFO5TW6aBv9z8lIp4sPTACFj4VucGGNs-Q')
+URL="https://opis-results-bot.vercel.app/"
 
 users=set()
 
