@@ -5,7 +5,7 @@ from flask import Flask, request
 
 ################################### TelegramBot frontend code starts here ##########################################
 
-bot = telebot.TeleBot('6513187968:AAFO5TW6aBv9z8lIp4sPTACFj4VucGGNs-Q')
+bot = telebot.TeleBot('your_telegram_api_key')
 URL="https://opis-results-bot.vercel.app/"
 
 users=set()
@@ -59,13 +59,9 @@ def command_about(message):
 mydb = mysql.connector.connect(
    host="db4free.net",
    port="3306",
-   user="results_bot",
-   password="Abenezerabera321##",
-   database="opisgradedb"
-# host="localhost",
-# user="root",
-# password="",
-# database="opis grade reporter"
+   user="your_username",
+   password="your_password",
+   database="your_dbname"
 )
 # Create a cursor object to interact with the database
 mycursor = mydb.cursor()
