@@ -1,28 +1,20 @@
-# Project Documentation
-
 ## Project Structure
 
-- **.gitignore**: Specifies intentionally untracked files that Git should ignore.
-- **Dockerfile**: Contains instructions to build a Docker image for the project, enabling containerization.
-- **LICENSE**: Contains the licensing information for the project, typically specifying how the software can be used and distributed.
 - **proc.file**: Declares the commands that are run by the application's dynos on Heroku.
 - **python_version_v2.py**: A Python script, likely the main application file or a significant module. (Further analysis of the file content would be needed for a more specific description).
 - **requirements.txt**: Lists the Python packages that the project depends on, along with their versions. This file is used to install the necessary dependencies.
 
-## Application Build and Execution Flow
+### Setup Instructions
+1.  **Clone the repository (if you haven't already):**
+    ```bash
+    git clone https://github.com/abenezer101/grade_result_bot
+    cd grade_result_bot
+    ```
+3.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-### Dockerfile: Setting up the Environment
-
-The `Dockerfile` is responsible for creating a consistent and reproducible environment for the application. It performs the following steps:
-
-- **Base Image**: It starts from the official `python:3.10` image, providing a Python 3.10 runtime environment.
-- **System Updates and Git Installation**: It updates the package lists (`apt update`), upgrades installed packages (`apt upgrade -y`), and installs Git (`apt install git -y`).
-- **Dependency Management**:
-    - It copies the `requirements.txt` file into the image (`COPY requirements.txt /requirements.txt`).
-    - It then installs the Python dependencies listed in `requirements.txt` using pip (`pip install -U pip && pip install -U -r requirements.txt`). The `-U` flag ensures pip itself and the packages are upgraded to their latest versions.
-- **Working Directory**: It sets the working directory within the container to `./` (`WORKDIR ./`), meaning subsequent commands will be run from this location.
-- **Copying Application Code**: It copies all files from the host machine's current directory (where the Docker build is executed) into the container's working directory (`COPY . .`).
-- **Running the Application**: The `CMD ["python", "python_version_v2.py"]` instruction specifies the default command to execute when a container is run from this image. It starts the Python application by running the `python_version_v2.py` script.
 
 ### python_version_v2.py: Application Logic
 
@@ -71,14 +63,14 @@ The application is containerized using Docker, which simplifies deployment and e
 1.  **Build the Docker Image**:
     Navigate to the project's root directory (where the `Dockerfile` is located) and run the following command in your terminal:
     ```bash
-    docker build -t opis-results-bot .
+    docker build -t results-bot .
     ```
     (You can replace `opis-results-bot` with your preferred image name).
 
 2.  **Run the Docker Container**:
     Once the image is built, you can run the application in a container using:
     ```bash
-    docker run opis-results-bot
+    docker run results-bot
     ```
     This will start the application, and the Telegram bot should become active. The Flask application will also be running, but its accessibility will depend on how ports are managed if you were to expose them (not explicitly configured in the current `Dockerfile` for external access beyond the container).
 
@@ -86,12 +78,4 @@ The application is containerized using Docker, which simplifies deployment and e
 
 The presence of a `proc.file` in the project suggests that it is prepared for deployment on Heroku. The `proc.file` contains:
 
-### Author :
-
-Abenezer Abera
-
-```
-bot: python_version_v2.py
-```
-
-This line tells Heroku to declare a process type named `bot` and run it using the command `python python_version_v2.py`. When deploying to Heroku, the platform will use this file to understand how to start your application. The `bot` process will execute the main Python script, starting both the Telegram bot and the Flask web server components.
+#### Author : Abenezer Abera
